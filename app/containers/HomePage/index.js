@@ -67,7 +67,7 @@ class HomePage extends React.Component { // eslint-disable-line react/prefer-sta
     return (
       <Grid>
         <Row>
-          <Col sm={12} md={6} lg={4}>
+          <Col sm={1} smOffset={5}>
             <Button onClick={this.toggleDiagnosesModal}>
               <FormattedMessage {...messages.openDiagnosesButton} />
             </Button>

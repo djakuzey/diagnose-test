@@ -27,12 +27,12 @@ class DiagnosesModal extends React.PureComponent {
           <Modal.Title>
             <FormattedMessage {...messages.modalTitle} />
           </Modal.Title>
-          <Button onClick={this.props.toggleCreateDiagnosisModal}>
+          <Button bsStyle="link" onClick={this.props.toggleCreateDiagnosisModal}>
             <FormattedMessage {...messages.addDiagnosis} />
           </Button>
         </Modal.Header>
         <Modal.Body>
-          <Table striped bordered hover responsive>
+          <Table hover responsive>
             <thead>
               <tr>
                 <th>Date</th>
@@ -46,7 +46,7 @@ class DiagnosesModal extends React.PureComponent {
               {diagnoses.map((diagnosis, index) => (
                 <tr key={diagnosis.get('id') || `${diagnosis.get('date')}-${index}`}>
                   <td>{diagnosis.get('date')}</td>
-                  <td>{diagnosis.get('diagnosis')}</td>
+                  <td><a href="">{diagnosis.get('diagnosis')}</a></td>
                   <td>{diagnosis.get('diagnoseType')}</td>
                   <td>{diagnosis.get('notice')}</td>
                   <td>{diagnosis.get('actuaryInfo')}</td>
