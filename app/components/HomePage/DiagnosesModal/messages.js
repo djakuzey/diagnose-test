@@ -14,4 +14,8 @@ export default defineMessages({
     id: 'app.components.HomePage.DiagnosesModal.closeModal',
     defaultMessage: 'Close',
   },
+  addDiagnosis: {
+    id: 'app.components.HomePage.DiagnosesModal.addDiagnosis',
+    defaultMessage: 'Add New',
+  },
 });

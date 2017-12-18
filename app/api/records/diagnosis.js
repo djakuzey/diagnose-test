@@ -1,11 +1,12 @@
 import { Record } from 'immutable';
 
-const diagnosis = new Record({
-  data: null,
-  diagnose: '',
-  type: '',
-  notes: '',
-  actuary: '',
+const Diagnosis = new Record({
+  id: undefined,
+  date: null,
+  actuaryInfo: '',
+  diagnosis: '',
+  diagnoseType: '',
+  notice: '',
 });
 
-export default diagnosis;
+export default Diagnosis;

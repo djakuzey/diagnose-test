@@ -3,7 +3,8 @@ import { Map, List } from 'immutable';
 import {
   FETCH_DIAGNOSES_REQUEST,
   FETCH_DIAGNOSES_SUCCESS,
-  FETCH_DIAGNOSES_ERROR,
+  SET_ERROR_MESSAGE,
+  CREATE_DIAGNOSIS_SUCCESS,
 } from './constants';
 
 const initialState = new Map({
@@ -20,8 +21,11 @@ function homeReducer(state = initialState, action) {
     case FETCH_DIAGNOSES_SUCCESS:
       return state.set('diagnoses', action.diagnoses);
 
-    case FETCH_DIAGNOSES_ERROR:
+    case SET_ERROR_MESSAGE:
       return state.set('error', action.message);
+
+    case CREATE_DIAGNOSIS_SUCCESS:
+      return state.update('diagnoses', (diagnoses) => diagnoses.push(action.diagnosis));
 
     default:
       return state;

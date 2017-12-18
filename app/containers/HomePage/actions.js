@@ -13,15 +13,31 @@ function fetchDiagnosesSuccess(diagnoses) {
   };
 }
 
-function fetchDiagnosesError(message) {
+function setErrorMessage(message) {
   return {
-    type: actionTypes.FETCH_DIAGNOSES_ERROR,
+    type: actionTypes.SET_ERROR_MESSAGE,
     message,
+  };
+}
+
+function createDiagnosisRequest(diagnosis) {
+  return {
+    type: actionTypes.CREATE_DIAGNOSIS_REQUEST,
+    diagnosis,
+  };
+}
+
+function createDiagnosisSuccess(diagnosis) {
+  return {
+    type: actionTypes.CREATE_DIAGNOSIS_SUCCESS,
+    diagnosis,
   };
 }
 
 export {
   fetchDiagnosesRequest,
   fetchDiagnosesSuccess,
-  fetchDiagnosesError,
+  setErrorMessage,
+  createDiagnosisRequest,
+  createDiagnosisSuccess,
 };

@@ -1,14 +1,3 @@
-/*
- * HomePage
- *
- * This is the first thing users see of our App, at the '/' route
- *
- * NOTE: while this component should technically be a stateless functional
- * component (SFC), hot reloading does not currently support SFCs. If hot
- * reloading is not a necessity for you then you can refactor it and remove
- * the linting exception.
- */
-
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -18,26 +7,43 @@ import {
   Grid,
 } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { compose, bindActionCreators } from 'redux';
+import PropTypes from 'prop-types';
+import { createStructuredSelector } from 'reselect';
 import injectReducer from 'utils/injectReducer';
 import injectSaga from 'utils/injectSaga';
+import { List } from 'immutable';
 
 import DiagnosesModal from 'components/HomePage/DiagnosesModal';
+import CreateDiagnosisModal from 'components/HomePage/CreateDiagnosisModal';
 import messages from './messages';
 import reducer from './reducer';
 import saga from './sagas';
-// import * as actions from './actions';
+import * as selectors from './selectors';
+import { fetchDiagnosesRequest, createDiagnosisRequest } from './actions';
+
 
 class HomePage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  static propTypes = {
+    fetchDiagnosesRequest: PropTypes.func,
+    createDiagnosisRequest: PropTypes.func,
+    diagnoses: PropTypes.instanceOf(List),
+  }
+
   constructor(props) {
     super(props);
 
     this.state = {
       diagnosesModalOpen: false,
-      addNewDiagnoseModalOpen: false,
+      createDiagnosisModalOpen: false,
     };
 
     this.toggleDiagnosesModal = ::this.toggleDiagnosesModal;
+    this.toggleCreateDiagnosisModal = ::this.toggleCreateDiagnosisModal;
+  }
+
+  componentDidMount() {
+    this.props.fetchDiagnosesRequest();
   }
 
   toggleModal(modal) {
@@ -50,8 +56,14 @@ class HomePage extends React.Component { // eslint-disable-line react/prefer-sta
     this.toggleModal('diagnosesModalOpen');
   }
 
+  toggleCreateDiagnosisModal() {
+    this.toggleModal('createDiagnosisModalOpen');
+  }
+
   render() {
-    const { diagnosesModalOpen } = this.state;
+    const { diagnosesModalOpen, createDiagnosisModalOpen } = this.state;
+    const { diagnoses } = this.props;
+
     return (
       <Grid>
         <Row>
@@ -62,9 +74,15 @@ class HomePage extends React.Component { // eslint-disable-line react/prefer-sta
           </Col>
           <Col sm={12} md={6}>
             <DiagnosesModal
+              diagnoses={diagnoses}
               show={diagnosesModalOpen}
               closeModal={this.toggleDiagnosesModal}
-              toggleAddNewDiagnoseModal={() => this.toggleModal('addNewDiagnoseModalOpen')}
+              toggleCreateDiagnosisModal={this.toggleCreateDiagnosisModal}
+            />
+            <CreateDiagnosisModal
+              show={createDiagnosisModalOpen}
+              closeModal={this.toggleCreateDiagnosisModal}
+              createDiagnosis={this.props.createDiagnosisRequest}
             />
           </Col>
         </Row>
@@ -73,7 +91,20 @@ class HomePage extends React.Component { // eslint-disable-line react/prefer-sta
   }
 }
 
-const withConnect = connect(null, null);
+const mapStateToProps = createStructuredSelector({
+  diagnoses: selectors.makeSelectDiagnoses(),
+  error: selectors.makeSelectError(),
+  loading: selectors.makeSelectLoading(),
+});
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    fetchDiagnosesRequest,
+    createDiagnosisRequest,
+  }, dispatch);
+}
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps);
 const withReducer = injectReducer({ key: 'home', reducer });
 const withSaga = injectSaga({ key: 'home', saga });
 
